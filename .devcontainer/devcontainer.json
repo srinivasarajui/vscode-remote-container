@@ -1,26 +1,37 @@
-# See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/typescript-node/.devcontainer/base.Dockerfile
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/typescript-node
+{
+	"name": "Node.js & TypeScript",
+	"build": {
+		"dockerfile": "Dockerfile",
+		// Update 'VARIANT' to pick a Node version: 12, 14, 16
+		"args": { 
+			"VARIANT": "14"
+		}
+	},
 
-# [Choice] Node.js version: 16, 14, 12
-ARG VARIANT="16-buster"
-FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT}
+	// Set *default* container specific settings.json values on container create.
+	"settings": { 
+		"terminal.integrated.profiles.linux": {
+			"zsh (login)": {
+			  "path": "zsh",
+			  "args": ["-l"]
+			}
+		  }
+	},
 
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"dbaeumer.vscode-eslint",
+		"johnpapa.angular-essential",
+	],
 
-# [Optional] Uncomment this section to install additional OS packages.
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-     && apt-get -y install --no-install-recommends curl \
-  gnupg \
-  linuxbrew-wrapper \
-  locales \
-  zsh \
-  wget \
-  fonts-powerline \
-  && su node -c "npm install -g @angular/cli@11.2.13 @aws-amplify/cli"
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
 
-USER node
-RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true \
-  && git clone https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k \
-  && cd ~ && curl -fsSLO https://raw.githubusercontent.com/romkatv/dotfiles-public/master/.purepower 
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
 
-ENV TERM xterm
-ENV SHELL /bin/zsh
-ADD .zshrc ~
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "node"
+}
